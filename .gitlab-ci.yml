@@ -18,4 +18,4 @@ build:
   - ./gradlew assemble
   artifacts:
     paths:
-    - app/build/outputs/aar
+    - privacymodulesapi/build/outputs/aar
