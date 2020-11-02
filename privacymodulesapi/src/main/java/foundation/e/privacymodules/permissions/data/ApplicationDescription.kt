@@ -1,4 +1,4 @@
-package foundation.e.privacymodules.permissions
+package foundation.e.privacymodules.permissions.data
 
 import android.graphics.drawable.Drawable
 
@@ -8,6 +8,6 @@ import android.graphics.drawable.Drawable
 data class ApplicationDescription(
     val packageName: String,
     val uid: Int,
-    val label: CharSequence?,
-    val icon: Drawable?,
+    var label: CharSequence?,
+    var icon: Drawable?
 )

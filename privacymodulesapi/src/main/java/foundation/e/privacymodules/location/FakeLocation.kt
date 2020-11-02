@@ -13,11 +13,12 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 
 /**
- * Implementation of the commons functionality between privileged and standard
- * versions of the module.
+ * Implementation of the functionality of fake location.
+ * All of them are available for normal application, so just one version is enough.
+ *
  * @param context an Android context, to retrieve system services for example.
  */
-abstract class AFakeLocation(protected val context: Context): IFakeLocation {
+class FakeLocation(protected val context: Context): IFakeLocation {
 
     /**
      * List of all the Location provider that will be mocked.
@@ -30,27 +31,6 @@ abstract class AFakeLocation(protected val context: Context): IFakeLocation {
      */
     private val locationManager: LocationManager get() =
         context.getSystemService(LOCATION_SERVICE) as LocationManager
-
-    /**
-     * @see IFakeLocation.hasPermission
-     */
-    override fun hasPermission(): Boolean {
-        val appOps = context.getSystemService(AppCompatActivity.APP_OPS_SERVICE) as AppOpsManager
-
-        val mode = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            appOps.checkOpNoThrow(AppOpsManager.OPSTR_MOCK_LOCATION,
-                Process.myUid(), context.packageName)
-        } else {
-            appOps.unsafeCheckOpNoThrow(AppOpsManager.OPSTR_MOCK_LOCATION,
-                Process.myUid(), context.packageName)
-        }
-
-        return mode == AppOpsManager.MODE_ALLOWED
-
-        // For pre-M, private location method.
-        //  if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-        //  Settings.Secure.getString(context.contentResolver, "mock_location") != "0"
-    }
 
     /**
      * @see IFakeLocation.startFakeLocation
@@ -93,9 +73,9 @@ abstract class AFakeLocation(protected val context: Context): IFakeLocation {
                 location.speedAccuracyMetersPerSecond = 0.01f
             }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                location.elapsedRealtimeNanos = SystemClock.elapsedRealtimeNanos()
-            }
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+//                location.elapsedRealtimeNanos = SystemClock.elapsedRealtimeNanos()
+//            }
 
             locationManager.setTestProviderLocation(provider, location)
         }

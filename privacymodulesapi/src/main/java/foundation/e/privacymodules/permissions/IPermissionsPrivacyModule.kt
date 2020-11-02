@@ -1,7 +1,11 @@
 package foundation.e.privacymodules.permissions
 
 import android.Manifest.permission.*
+import android.graphics.drawable.Drawable
 import foundation.e.privacymodules.commons.ManualAction
+import foundation.e.privacymodules.permissions.data.AppOpModes
+import foundation.e.privacymodules.permissions.data.ApplicationDescription
+import foundation.e.privacymodules.permissions.data.PermissionDescription
 
 /**
  * List applications and manage theirs permissions.
@@ -21,6 +25,9 @@ interface IPermissionsPrivacyModule {
      */
     fun getPermissions(packageName: String): List<String>
 
+    fun getPermissionDescription(permissionName: String): PermissionDescription
+
+
     /**
      * Get the filled up [ApplicationDescription] for the app specified by its [packageName]
      * @param packageName the appId of the app
@@ -28,67 +35,76 @@ interface IPermissionsPrivacyModule {
      */
     fun getApplicationDescription(packageName: String): ApplicationDescription
 
-
-
     /**
-     * Get the current [PermissionStatus] for the specified runtime permission and app.
-     * On low privileges implementations, [PermissionStatus.FOREGROUND] can't be returned.
+     * Check if the current runtime permission is granted for the specified app.
      *
-     * @param uid the uid (linunx user id) of the app
-     * @param packageName the appId of the app
+     * @param packageName the packageName of the app
      * @param permissionName the name of the permission in "android.permission.PERMISSION" format.
      * @return the current status for this permission.
      */
-    fun getPermissionStatus(uid: Int, packageName: String, permissionName: String): PermissionStatus
+    fun isDangerousPermissionGranted(packageName: String, permissionName: String): Boolean
 
 
     /**
-     * Set the status for the specified runtime permission and app.
+     * Get the appOps mode for the specified [appOpPermission] of the specified application.
+     *
+     * @param appDesc the application
+     * @param appOpPermissionName the AppOps permission name.
+     * @return mode, as a [AppOpModes]
+     */
+    fun getAppOpMode(appDesc: ApplicationDescription, appOpPermissionName: String): AppOpModes
+
+    /**
+     * Grant or revoke the specified permission for the specigfied app.
      * * If their is not enough privileges to get the permission, return the [ManualAction]
      * the user has to perform himself.
      *
-     * @param uid the uid (linunx user id) of the app
-     * @param packageName the appId of the app
+     * @param appDesc the application
      * @param permissionName the name of the permission in "android.permission.PERMISSION" format.
-     * @param status the status to set.
+     * @param grant true grant the permission, false revoke it.
      * @return null, if the permission is or has just been granted, a [ManualAction] if
      * user has to do it himself.
      */
-    fun setRuntimePermission(uid: Int, packageName: String, permissionName: String, status: PermissionStatus): ManualAction?
+    fun toggleDangerousPermission(
+        appDesc: ApplicationDescription,
+        permissionName: String,
+        grant: Boolean
+    ): ManualAction?
 
-    companion object {
 
-        /**
-         * List of the runtime permissions : the permission that can be granted or revoqued
-         * directly by the used, since Android M.
-         */
-        val RUNTIME_PERMISSIONS = setOf(
-            READ_CALENDAR,
-            WRITE_CALENDAR,
-            CAMERA,
-            READ_CONTACTS,
-            WRITE_CONTACTS,
-            GET_ACCOUNTS,
-            ACCESS_FINE_LOCATION,
-            ACCESS_COARSE_LOCATION,
-            RECORD_AUDIO,
-            READ_PHONE_STATE,
-            READ_PHONE_NUMBERS,
-            CALL_PHONE,
-            ANSWER_PHONE_CALLS,
-            READ_CALL_LOG,
-            WRITE_CALL_LOG,
-            ADD_VOICEMAIL,
-            USE_SIP,
-            PROCESS_OUTGOING_CALLS,
-            BODY_SENSORS,
-            SEND_SMS,
-            RECEIVE_SMS,
-            READ_SMS,
-            RECEIVE_WAP_PUSH,
-            RECEIVE_MMS,
-            READ_EXTERNAL_STORAGE,
-            WRITE_EXTERNAL_STORAGE
-        )
-    }
+    /**
+     * Change the appOp Mode for the specified appOpPermission and application.
+     * @param appDesc the application
+     * @param appOpPermissionName the AppOps permission name.
+     * @return null, if the mode has been changed or if nothing can be done, a [ManualAction] if
+     * user has to do it himself.
+     */
+    fun setAppOpMode(
+        appDesc: ApplicationDescription,
+        appOpPermissionName: String,
+        status: AppOpModes
+    ): ManualAction?
+
+    /**
+     * Get the permission group associated with this permission, or null.
+     */
+    fun getPermissionGroup(permission: String): String?
+
+    /**
+     * Check that the app has the accessibility service enabled in settings.
+     * Return null if the library doesn't use accessibility.
+     * @return true if enabled, false if usable but disabled, null if not used.
+     */
+    fun isAccessibilityEnabled(): Boolean?
+
+
+    /**
+     * Return true if the application is flagged Dangerous.
+     */
+    fun isPermissionsDangerous(permissionName: String): Boolean
+
+    /**
+     * Get the application icon.
+     */
+    fun getApplicationIcon(packageName: String): Drawable?
 }
