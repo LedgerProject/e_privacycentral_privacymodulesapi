@@ -8,6 +8,7 @@ import android.content.pm.PermissionInfo
 import android.content.pm.PermissionInfo.PROTECTION_DANGEROUS
 import android.graphics.drawable.Drawable
 import android.os.Build
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import foundation.e.privacymodules.commons.Logger
 import foundation.e.privacymodules.permissions.data.AppOpModes
@@ -90,11 +91,7 @@ abstract class APermissionsPrivacyModule(protected val context: Context): IPermi
     override fun isPermissionsDangerous(permissionName: String): Boolean {
         try {
             val permissionInfo = context.packageManager.getPermissionInfo(permissionName, 0)
-            return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
-                permissionInfo.protectionLevel == PROTECTION_DANGEROUS
-            } else {
-                permissionInfo.protection == PROTECTION_DANGEROUS
-            }
+            return isPermissionsDangerous(permissionInfo)
         } catch (e: Exception) {
             Logger.d("PermissionsModule", e.message)
             return false
@@ -104,7 +101,7 @@ abstract class APermissionsPrivacyModule(protected val context: Context): IPermi
     private fun isPermissionsDangerous(permissionInfo: PermissionInfo): Boolean {
         try {
             return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
-                permissionInfo.protectionLevel == PROTECTION_DANGEROUS
+                permissionInfo.protectionLevel and PROTECTION_DANGEROUS == 1
             } else {
                 permissionInfo.protection == PROTECTION_DANGEROUS
             }
