@@ -62,20 +62,17 @@ class FakeLocation(protected val context: Context): IFakeLocation {
 
             // Set default value for all the other required fields.
             location.altitude = 3.0
-            location.time =System.currentTimeMillis()
+            location.time = System.currentTimeMillis()
             location.speed = 0.01f
             location.bearing = 1f
             location.accuracy = 3f
+            location.elapsedRealtimeNanos = SystemClock.elapsedRealtimeNanos()
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 location.bearingAccuracyDegrees =0.1f
                 location.verticalAccuracyMeters = 0.1f
                 location.speedAccuracyMetersPerSecond = 0.01f
             }
-
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-//                location.elapsedRealtimeNanos = SystemClock.elapsedRealtimeNanos()
-//            }
 
             locationManager.setTestProviderLocation(provider, location)
         }
