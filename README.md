@@ -27,7 +27,7 @@ See [here](./doc/architecture.md)
 
 # Structure (UML class diagrams)
 
-* v0.1 (Permissions)
+* v0.0.2.1 (Permissions)
 
 
 ```mermaid
