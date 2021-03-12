@@ -27,7 +27,7 @@ See [here](./doc/architecture.md)
 
 # Structure (UML class diagrams)
 
-* v0.0.2.1 (Permissions)
+* v0.0.2.2 (Permissions, FakeLocation)
 
 
 ```mermaid
@@ -39,6 +39,9 @@ classDiagram
     AppPermissionInfo o-- AppInfo
     AppPermissionInfo o-- PermissionType
 
+    AbstractPermissionManager -- FakeLocationManager
+    IFakeLocationManager <|.. FakeLocationManager
+ 
     class AbstractPermissionHelper{
         <<abstract>>
         #PermissionCache: cache
@@ -87,5 +90,13 @@ classDiagram
     <<abstract>>
     +toggleDangerousPermission()*
     +setAppOppMode()*
-    }     
+    }
+
+    class IFakeLocationManager{
+    <<interface>>
+    +isFakeLocationEnabled() boolean
+    +setFakeLoction(doble latitude, double longitude)
+    +setRandomLocation()
+    +startFakeLocation()
+    }   
 ```
