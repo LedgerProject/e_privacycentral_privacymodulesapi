@@ -131,6 +131,7 @@ TrackerStatsManager o-- TrackerBlockingStats
     +setTrackerStatus(newStatus: TrackerStatus)
     +getTrackersByStatus(status: TrackerStatus) List<Tracker>
     +getTrackerStatus(): TrackerStatus
+    +getAppTrackers(appName: String) List<Tracker>
     +removeTracker(TrackerId: TrackerId)
     }
 
