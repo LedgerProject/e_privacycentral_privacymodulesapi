@@ -12,6 +12,7 @@ See [here](./doc/architecture.md)
 
 # Functionalities 
 
+
 ## v0.0.2
 
 * Permissions
@@ -27,6 +28,9 @@ See [here](./doc/architecture.md)
 
 # Structure (UML class diagrams)
 
+History:
+
+* v0.0.2.4 (Trackers blocker)
 * v0.0.2.2 (Permissions, FakeLocation)
 
 
@@ -98,5 +102,67 @@ classDiagram
     +setFakeLoction(doble latitude, double longitude)
     +setRandomLocation()
     +startFakeLocation()
-    }   
+    }
+```
+
+```mermaid
+classDiagram
+
+TrackerBlockingStats o-- HistoryEntry
+HistoryEntry o-- HistoryEntryType
+AbstractTrackerManager o-- Tracker
+TrackerStatsManager o-- TrackerBlockingStats
+
+
+ class Tracker{
+    <<data class>>
+    +id: TrackerId,
+    +tags: List<Tag>,
+    +sources: List<TrackerSource>,
+    +meta: TrackerMetadata,
+    +configs: ListTrackerConfig>,
+    +status: TrackerStatus
+    }
+
+    class AbstractTrackerManager{
+    <<abstract>>
+    -trackers: List<Tracker>
+    +addTracker(trackerId: TrackerId)
+    +setTrackerStatus(newStatus: TrackerStatus)
+    +getTrackersByStatus(status: TrackerStatus) List<Tracker>
+    +getTrackerStatus(): TrackerStatus
+    +removeTracker(TrackerId: TrackerId)
+    }
+
+    class TrackerStatsManager{
+    -trackersStats: HashMap<TrackerId, TrackerBlockingStats>
+    #clearStats(TrackerId: TrackerId)
+    #updateTrackerStats(trackerId: TrackerId, stats: TrackerBlockingStats)
+    +getTrackerStats(trackerId: TrackerId) TrackerBlockingStats
+    +getTrackerStatusByDate(trackerId: TrackerId, date: Date) TrackerBlockingStats
+    +getTrackersStatusesByDate(date: Date): List<TrackerBlockingStats>
+    }
+
+    class TrackerBlockingStats{
+    <<data class>>
+    +allowed: Int,
+    +denied: Int,
+    +entries: List<HistoryEntry>
+    }
+
+    class HistoryEntry{
+    <<data class>>
+    +name: String,
+    +type: HistoryEntryType,
+    +time: Date,
+    +requests: Int
+    }
+
+    class HistoryEntryType {
+    <<enumeration>>
+    BLOCKED,
+    PASSED,
+    PASSED_ALLOWED, 
+    BLOCKEED_DENIED
+}
 ```
