@@ -8,13 +8,10 @@ import android.content.pm.PermissionInfo
 import android.content.pm.PermissionInfo.PROTECTION_DANGEROUS
 import android.graphics.drawable.Drawable
 import android.os.Build
-import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import foundation.e.privacymodules.commons.Logger
 import foundation.e.privacymodules.permissions.data.AppOpModes
 import foundation.e.privacymodules.permissions.data.ApplicationDescription
 import foundation.e.privacymodules.permissions.data.PermissionDescription
-import java.lang.Exception
 
 /**
  * Implementation of the commons functionality between privileged and standard
@@ -73,7 +70,7 @@ abstract class APermissionsPrivacyModule(protected val context: Context): IPermi
         appOpPermissionName: String
     ): AppOpModes {
 
-        val appOps = context.getSystemService(AppCompatActivity.APP_OPS_SERVICE) as AppOpsManager
+        val appOps = context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
 
         val mode = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             appOps.checkOpNoThrow(appOpPermissionName,

@@ -1,16 +1,12 @@
 package foundation.e.privacymodules.location
 
-import android.app.AppOpsManager
 import android.content.Context
 import android.content.Context.LOCATION_SERVICE
 import android.location.Criteria
 import android.location.Location
 import android.location.LocationManager
 import android.os.Build
-import android.os.Process
 import android.os.SystemClock
-import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 
 /**
  * Implementation of the functionality of fake location.
