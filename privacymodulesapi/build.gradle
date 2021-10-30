@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-//apply plugin: 'org.jetbrains.dokka'
+apply plugin: 'maven-publish'
 
 android {
     compileSdkVersion 30
@@ -36,7 +36,28 @@ dependencies {
 
 }
 
-//dokka {
-//    outputFormat = 'html'
-//    outputDirectory = '../doc/dokkaHtml'
-//}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId 'foundation.e'
+            //You can either define these here or get them from project conf elsewhere
+            artifactId 'privacymodule.api'
+            version android.defaultConfig.versionName
+            artifact "$buildDir/outputs/aar/privacymodulesapi-release.aar" //aar artifact you want to publish
+
+            //generate pom nodes for dependencies
+            pom.withXml {
+                def dependenciesNode = asNode().appendNode('dependencies')
+                configurations.implementation.allDependencies.each { dependency ->
+                    if (dependency.name != 'unspecified') {
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', dependency.group)
+                        dependencyNode.appendNode('artifactId', dependency.name)
+                        dependencyNode.appendNode('version', dependency.version)
+                    }
+                }
+            }
+        }
+    }
+}

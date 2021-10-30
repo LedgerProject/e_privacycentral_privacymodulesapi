@@ -4,6 +4,12 @@ Root module for the privacy tools.
 This module defines all the low level APIs to monitor and manage privacy in android systems. It uses interface and abstract classes, and then should come with other modules, implementing these interfaces.
 The implementations could use various technical solutions depending on the privileges levels they have in the android system.
 
+# Build
+
+    ./gradlew :privacymodulesapi:assembleRelease
+    ./gradlew --console=verbose publishToMavenLocal
+
+
 # Modules architecture
 
 See [here](./doc/architecture.md)

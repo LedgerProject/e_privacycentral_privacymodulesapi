@@ -28,7 +28,7 @@ abstract class APermissionsPrivacyModule(protected val context: Context): IPermi
      */
     override fun getInstalledApplications(): List<ApplicationDescription> {
         val appInfos = context.packageManager.getInstalledApplications(0)
-        return appInfos.map {buildApplicationDescription(it) }
+        return appInfos.map { buildApplicationDescription(it) }
     }
 
     /**
