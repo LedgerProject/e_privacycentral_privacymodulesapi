@@ -107,4 +107,11 @@ interface IPermissionsPrivacyModule {
      * Get the application icon.
      */
     fun getApplicationIcon(packageName: String): Drawable?
+
+    /**
+     *  Authorize the specified package to be used as Vpn.
+     *  @return true if authorization has been set, false if an error has occurred.
+     */
+    fun setVpnPackageAuthorization(packageName: String): Boolean
+
 }
