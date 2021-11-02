@@ -16,11 +16,30 @@ interface ITrackTrackersPrivacyModule {
     fun getTrackersCount(): Int
 
     /**
+     * Return the number of encountered trackers for the last 24 hours
+     * TODO: could be "of the previous day" for a first shot
+     */
+    fun getPastDayTrackersCount(): Int
+
+    /**
+     * Return the number of encountered trackers for the last month
+     * TODO: could be "of the previous day" for a first shot
+     */
+    fun getPastMonthTrackersCount(): Int
+
+    /**
+     * Return the number of encountered trackers for the last year
+     * TODO: could be "of the previous day" for a first shot
+     */
+    fun getPastYearTrackersCount(): Int
+
+
+    /**
      * Return number of trackers calls by hours, for the last 24hours.
      * TODO: could be "of the previous day" for a first shot
      * @return list of 24 numbers of trackers calls by hours
      */
-    fun getPast24HoursTrackersCalls(): List<Int>
+    fun getPastDayTrackersCalls(): List<Int>
 
     /**
      * Return number of trackers calls by day, for the last 30 days.
