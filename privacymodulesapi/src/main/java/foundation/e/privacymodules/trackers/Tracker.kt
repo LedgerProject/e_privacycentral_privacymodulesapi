@@ -6,8 +6,8 @@ package foundation.e.privacymodules.trackers
 data class Tracker(
     val id: Int,
     val label: String,
-    val hostname: String?,
-    val exodusId: Int?,
-    val description: String?,
-    val networkSignature: String?
+    val hostname: String? = null,
+    val exodusId: Int? = null,
+    val description: String? = null,
+    val networkSignature: String? = null
 )

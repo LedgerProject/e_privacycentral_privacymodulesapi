@@ -3,6 +3,17 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven {
+            url "https://gitlab.e.foundation/api/v4/groups/e/privacy-central/-/packages/maven"
+            name "GitLab"
+            credentials(HttpHeaderCredentials) {
+                name = 'Private-Token'
+                value = gitLabPrivateToken
+            }
+            authentication {
+                header(HttpHeaderAuthentication)
+            }
+        }
     }
 }
 
