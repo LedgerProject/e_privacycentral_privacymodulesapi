@@ -19,3 +19,9 @@ build:
   artifacts:
     paths:
     - privacymodulesapi/build/outputs/aar
+
+deploy:
+  script:
+    - 'gradle publish'
+  only:
+    - master
