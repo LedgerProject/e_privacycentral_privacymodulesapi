@@ -13,10 +13,16 @@ import foundation.e.privacymodules.permissions.data.PermissionDescription
 interface IPermissionsPrivacyModule {
 
     /**
-     * List all the installed application on the device.
+     * List the installed application on the device which have not the FLAGS_SYSTEM.
      * @return list of filled up [ApplicationDescription]
      */
     fun getInstalledApplications(): List<ApplicationDescription>
+
+    /**
+     * List all the installed application on the device.
+     * @return list of filled up [ApplicationDescription]
+     */
+    fun getAllApplications(): List<ApplicationDescription>
 
     /**
      * List of permissions names used by an app, specified by its [packageName].

@@ -21,11 +21,20 @@ import foundation.e.privacymodules.permissions.data.PermissionDescription
 abstract class APermissionsPrivacyModule(protected val context: Context): IPermissionsPrivacyModule {
 
     /**
+     * @see IPermissionsPrivacyModule.getAllApplications
+     */
+    override fun getAllApplications(): List<ApplicationDescription> {
+        val appInfos = context.packageManager.getInstalledApplications(0)
+        return appInfos.map { buildApplicationDescription(it) }
+    }
+
+    /**
      * @see IPermissionsPrivacyModule.getInstalledApplications
      */
     override fun getInstalledApplications(): List<ApplicationDescription> {
-        val appInfos = context.packageManager.getInstalledApplications(0)
-        return appInfos.map { buildApplicationDescription(it) }
+        return context.packageManager.getInstalledApplications(0)
+            .filter { it.flags and ApplicationInfo.FLAG_SYSTEM == 0 }
+            .map { buildApplicationDescription(it) }
     }
 
     /**
