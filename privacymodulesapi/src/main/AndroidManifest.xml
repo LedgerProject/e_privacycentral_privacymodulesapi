@@ -1,4 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="foundation.e.privacymodules"
     >
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <application>
+        <service android:name="foundation.e.privacymodules.location.FakeLocationService"
+            android:enabled="true" />
+    </application>
 </manifest>

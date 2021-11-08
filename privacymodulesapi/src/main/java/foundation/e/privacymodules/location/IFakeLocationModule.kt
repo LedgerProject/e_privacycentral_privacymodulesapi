@@ -3,7 +3,7 @@ package foundation.e.privacymodules.location
 /**
  * Manage a fake location on the device.
  */
-interface IFakeLocation {
+interface IFakeLocationModule {
     /**
      * Start to fake the location module. Call [setFakeLocation] after to set the fake
      * position.

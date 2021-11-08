@@ -7,6 +7,7 @@ import android.location.Location
 import android.location.LocationManager
 import android.os.Build
 import android.os.SystemClock
+import android.util.Log
 
 /**
  * Implementation of the functionality of fake location.
@@ -14,7 +15,7 @@ import android.os.SystemClock
  *
  * @param context an Android context, to retrieve system services for example.
  */
-class FakeLocation(protected val context: Context): IFakeLocation {
+class FakeLocationModule(protected val context: Context): IFakeLocationModule {
 
     /**
      * List of all the Location provider that will be mocked.
@@ -29,10 +30,16 @@ class FakeLocation(protected val context: Context): IFakeLocation {
         context.getSystemService(LOCATION_SERVICE) as LocationManager
 
     /**
-     * @see IFakeLocation.startFakeLocation
+     * @see IFakeLocationModule.startFakeLocation
      */
     override fun startFakeLocation() {
         providers.forEach { provider ->
+            try {
+                locationManager.removeTestProvider(provider)
+            } catch(e: Exception) {
+                Log.d("FakeLocationModule", "Test provider $provider already removed.")
+            }
+
             locationManager.addTestProvider(
                 provider,
                 false,
@@ -47,10 +54,11 @@ class FakeLocation(protected val context: Context): IFakeLocation {
         }
     }
 
-    /**
-     * @see IFakeLocation.setFakeLocation
-     */
     override fun setFakeLocation(latitude: Double, longitude: Double) {
+        context.startService(FakeLocationService.buildFakeLocationIntent(context, latitude, longitude))
+    }
+
+    internal fun setTestProviderLocation(latitude: Double, longitude: Double) {
         providers.forEach { provider ->
             val location = Location(provider)
             location.latitude = latitude
@@ -65,7 +73,7 @@ class FakeLocation(protected val context: Context): IFakeLocation {
             location.elapsedRealtimeNanos = SystemClock.elapsedRealtimeNanos()
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                location.bearingAccuracyDegrees =0.1f
+                location.bearingAccuracyDegrees = 0.1f
                 location.verticalAccuracyMeters = 0.1f
                 location.speedAccuracyMetersPerSecond = 0.01f
             }
@@ -75,12 +83,17 @@ class FakeLocation(protected val context: Context): IFakeLocation {
     }
 
     /**
-     * @see IFakeLocation.stopFakeLocation
+     * @see IFakeLocationModule.stopFakeLocation
      */
     override fun stopFakeLocation() {
+        context.stopService(FakeLocationService.buildStopIntent(context))
         providers.forEach { provider ->
-            locationManager.setTestProviderEnabled(provider, false)
-            locationManager.removeTestProvider(provider)
+            try {
+                locationManager.setTestProviderEnabled(provider, false)
+                locationManager.removeTestProvider(provider)
+            } catch (e: Exception) {
+                Log.d("FakeLocationModule", "Test provider $provider already removed.")
+            }
         }
     }
 }
