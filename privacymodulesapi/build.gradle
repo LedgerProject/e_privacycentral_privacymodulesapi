@@ -9,7 +9,7 @@ android {
         minSdkVersion 24
         targetSdkVersion 30
         versionCode 3
-        versionName "0.3.1"
+        versionName "0.3.2"
 
         consumerProguardFiles "consumer-rules.pro"
     }
@@ -58,15 +58,30 @@ publishing {
                 }
             }
             repositories {
-                maven {
-                    url "https://gitlab.e.foundation/api/v4/projects/780/packages/maven"
-                    credentials(HttpHeaderCredentials) {
-                        name = "Private-Token"
-                        value = gitLabPrivateToken
-                        // the variable resides in ~/.gradle/gradle.properties
+                def ciJobToken = System.getenv("CI_JOB_TOKEN")
+                def ciApiV4Url = System.getenv("CI_API_V4_URL")
+                if (ciJobToken != null) {
+                    maven {
+                        url "${ciApiV4Url}/projects/780/packages/maven"
+                        credentials(HttpHeaderCredentials) {
+                            name = 'Job-Token'
+                            value = ciJobToken
+                        }
+                        authentication {
+                            header(HttpHeaderAuthentication)
+                        }
                     }
-                    authentication {
-                        header(HttpHeaderAuthentication)
+                } else {
+                    maven {
+                        url "https://gitlab.e.foundation/api/v4/projects/780/packages/maven"
+                        credentials(HttpHeaderCredentials) {
+                            name = "Private-Token"
+                            value = gitLabPrivateToken
+                            // the variable resides in ~/.gradle/gradle.properties
+                        }
+                        authentication {
+                            header(HttpHeaderAuthentication)
+                        }
                     }
                 }
             }
