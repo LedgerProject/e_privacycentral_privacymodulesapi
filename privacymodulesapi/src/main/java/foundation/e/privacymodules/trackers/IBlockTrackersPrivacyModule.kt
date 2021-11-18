@@ -58,6 +58,11 @@ interface IBlockTrackersPrivacyModule {
     fun getWhiteList(appUid: Int): List<Tracker>
 
     /**
+     * List apps that can be either blocked or manually whitelisted in PrivacyCentral
+     */
+    fun getBlockableApps(): List<ApplicationInfo>
+
+    /**
      * Callback interface to get updates about the state of the Block trackers module.
      */
     interface Listener {
