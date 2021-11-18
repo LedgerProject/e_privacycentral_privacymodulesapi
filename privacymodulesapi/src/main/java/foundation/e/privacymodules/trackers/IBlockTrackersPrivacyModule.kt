@@ -1,6 +1,6 @@
 package foundation.e.privacymodules.trackers
 
-import android.content.pm.ApplicationInfo
+import foundation.e.privacymodules.permissions.data.ApplicationDescription
 
 /**
  * Manage trackers blocking and whitelisting.
